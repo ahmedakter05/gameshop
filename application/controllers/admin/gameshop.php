@@ -307,11 +307,11 @@ class Gameshop extends My_Controller {
 		$crud->set_table('gameshop_free_offers');
 		$crud->columns('id', 'name','details', 'updatetime');
 		//$crud->set_relation('parentid','gameshop_categories','cname');
-		$crud->display_as('id','ID')->display_as('name','Name')->display_as('url','Url')
+		$crud->display_as('id','ID')->display_as('name','Name')->display_as('link','Link (without http://)')
 			 ->display_as('details','Details')->display_as('updatetime','Update Time');
 		//$crud->edit_fields('cname','curl','cinfo','parentid','cimageurl1','fontawesome');
-		//$crud->callback_before_insert(array($this,'callback_gcat_ui'));
-		//$crud->callback_before_update(array($this,'callback_gcat_ui'));
+		$crud->callback_before_insert(array($this,'callback_sf_free_offers'));
+		$crud->callback_before_update(array($this,'callback_sf_free_offers'));
 		$crud->set_field_upload('image','assets/uploads/files'); 
 		//$crud->field_type('root','dropdown', array('0' => 'None', '1' => 'Category', '2' => 'Industry', '3' => 'Technology'));
 		$this->data['crud'] = $crud->render();
@@ -567,6 +567,12 @@ class Gameshop extends My_Controller {
 	function callback_slider_ui($post_array)
 	{
 	  $post_array['updatedate'] = date('Y-m-d H:i:s');
+	  return $post_array;
+	}
+
+	function callback_sf_free_offers($post_array)
+	{
+	  $post_array['link'] = urlencode($post_array['link']);
 	  return $post_array;
 	}
 

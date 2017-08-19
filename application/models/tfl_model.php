@@ -1218,10 +1218,21 @@ Gameshop Boundary
 	function gameshop_free_offers()
 	{
 		$query = $this->db->select('*')
-						  ->order_by('count', 'asc')
+						  ->order_by('count', 'desc')
 						  //->limit(4)
 		                  ->get('gameshop_free_offers')
 		                  ->result_array();
+
+		//var_dump($query);
+		return $query;
+	}
+
+	function gameshop_foffers_get_link($gid=NULL)
+	{
+		$query = $this->db->select('link')
+						  ->where('id', $gid)
+		                  ->get('gameshop_free_offers')
+		                  ->row_array();
 
 		//var_dump($query);
 		return $query;

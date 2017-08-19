@@ -51,7 +51,7 @@
 						</li>
 						
 						<li class="dropdown">
-							<a href="<?php echo base_url(); ?>games/category/games" class="dropdown-toggle">Games</a>
+							<a href="<?php echo base_url(); ?>games/all" class="dropdown-toggle">Games</a>
 							<ul class="dropdown-menu default">
 								<?php foreach ($gameshop_products_menu_games as $value):?>
 								<li class="dropdown-submenu">

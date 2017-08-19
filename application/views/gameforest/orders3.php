@@ -22,6 +22,8 @@
 			<div class="container">
 				<div class="row">
 					<div class="col-md-3 col-sm-4 hidden-xs">
+
+						<?php $this->view('gameforest/side_menu_cart'); ?>
 						
 						<?php $this->view('gameforest/sidemenu_profile'); ?>
 

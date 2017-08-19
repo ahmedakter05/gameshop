@@ -38,7 +38,7 @@
 							<h4 class="no-padding-top">Order No: <?php echo $orderinfo['orderno']; ?> <small>Order Date: <?php echo $odate; ?></small></h4>
 							<div class="pull-right">
 								<a href="<?php echo base_url()?>games/manage_orders" class="btn btn-primary btn-icon-left"><i class="fa fa-comments"></i> Pay Later</a>
-								<div class="dropdown">
+								<!--div class="dropdown">
 									<a href="#" class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bars"></i></a>
 									<ul class="dropdown-menu pull-right">
 		                                <li><a href="#"><i class="fa fa-bar-chart-o"></i> View Cart</a></li>
@@ -46,7 +46,7 @@
 		                                <li class="divider"></li>
 		                                <li><a href="forum-new.html"><i class="fa fa-plus"></i> Profiles</a></li>
 		                            </ul>
-								</div>
+								</div-->
 							</div>
 						</div>
 						<div class="panel panel-default">

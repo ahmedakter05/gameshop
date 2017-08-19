@@ -12,6 +12,11 @@
 				<?php endforeach; ?>
 			</ul>
 		</div>
+		<div class="panel-body no-padding">
+			<ul class="panel-list-bordered">
+				<li align="right"><a href="<?php echo base_url(); ?>games/cart"><i class="fa fa-shopping-cart"></i> View Cart</a></li>
+			</ul>
+		</div>
 	</div>
 </div>
 <?php } ?>

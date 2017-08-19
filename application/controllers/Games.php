@@ -36,6 +36,7 @@ class Games extends My_Controller {
 		$this->data['slider'] = $this->tfl_model->gameshop_slider();
 		//$this->data['gameshop_tags_menu'] = $this->tfl_model->gameshop_tags_menu();
 		$this->data['home_latest_games'] = $this->tfl_model->gameshop_latest_products('1');
+		$this->data['home_latest_cards'] = $this->tfl_model->gameshop_latest_products('14');
 		$this->data['home_latest_accessories'] = $this->tfl_model->gameshop_latest_products('4');
 		$this->data['home_latest_toys'] = $this->tfl_model->gameshop_latest_products('3');
 		//var_dump($this->data['products']);
@@ -182,11 +183,15 @@ class Games extends My_Controller {
 		$page = 'Games Forest';
 		$this->set_activepage($page);
 
+		$darpa = $this->tfl_model->gameshop_foffers_get_link($gid);
+		$link = $darpa['link'];
+
 		if($this->tfl_model->gameshop_foffers_update_counts($gid))
 		{
+			$link = urldecode($link);
 			redirect('http://' . $link, 'refresh');
 		}
-		
+
 		redirect(($this->session->userdata('last_page')) ? $this->session->userdata('last_page') : 'games/all', 'refresh');
 		$this->session->set_userdata('last_page', current_url());
 		$this->load->view($this->template_dir.'free_offers', $this->data);
@@ -300,7 +305,7 @@ class Games extends My_Controller {
 			redirect($this->session->last_page(1), 'refresh');
 		}
 
-		redirect($this->session->last_page(1), 'refresh');
+		redirect(($this->session->userdata('last_page')) ? $this->session->userdata('last_page') : 'games/all', 'refresh');
 		
 
 		//$this->data['cartproductslist'] = $this->tfl_model->gameshop_cart_product_list($cart);
@@ -1259,14 +1264,7 @@ class Games extends My_Controller {
 
 		if ($this->form_validation->run() == true)
 		{
-			echo "Good Work";
-
-			$additional_data = array(
-				'first_name' => $this->input->post('first_name'),
-				'last_name'  => $this->input->post('last_name'),
-				'phone'      => $this->input->post('mobile'),
-			);
-
+			
 			$profile_data = array(
 				'fullname' => $this->input->post('first_name') . ' ' . $this->input->post('last_name'),
 				'firstname' => $this->input->post('first_name'),
@@ -1593,6 +1591,144 @@ class Games extends My_Controller {
 			$this->load->view('gameforest/register3', $this->data);
 		}
 	}
+
+	public function change_password()
+	{
+		$this->form_validation->set_rules('old', $this->lang->line('change_password_validation_old_password_label'), 'required');
+		$this->form_validation->set_rules('new', $this->lang->line('change_password_validation_new_password_label'), 'required|min_length[' . $this->config->item('min_password_length', 'ion_auth') . ']|max_length[' . $this->config->item('max_password_length', 'ion_auth') . ']|matches[new_confirm]');
+		$this->form_validation->set_rules('new_confirm', $this->lang->line('change_password_validation_new_password_confirm_label'), 'required');
+
+		if (!$this->ion_auth->logged_in())
+		{
+			redirect('auth/login', 'refresh');
+		}
+
+		$user = $this->ion_auth->user()->row();
+
+		if ($this->form_validation->run() == false)
+		{
+			// display the form
+			// set the flash data error message if there is one
+			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+
+			$this->data['min_password_length'] = $this->config->item('min_password_length', 'ion_auth');
+			$this->data['old_password'] = array(
+				'name' => 'old',
+				'id'   => 'old',
+				'type' => 'password',
+			);
+			$this->data['new_password'] = array(
+				'name'    => 'new',
+				'id'      => 'new',
+				'type'    => 'password',
+				'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+			);
+			$this->data['new_password_confirm'] = array(
+				'name'    => 'new_confirm',
+				'id'      => 'new_confirm',
+				'type'    => 'password',
+				'pattern' => '^.{'.$this->data['min_password_length'].'}.*$',
+			);
+			$this->data['user_id'] = array(
+				'name'  => 'user_id',
+				'id'    => 'user_id',
+				'type'  => 'hidden',
+				'value' => $user->id,
+			);
+
+			// render
+			$this->_render_page('auth/change_password', $this->data);
+		}
+		else
+		{
+			$identity = $this->session->userdata('identity');
+
+			$change = $this->ion_auth->change_password($identity, $this->input->post('old'), $this->input->post('new'));
+
+			if ($change)
+			{
+				//if the password was successfully changed
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				$this->logout();
+			}
+			else
+			{
+				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				redirect('auth/change_password', 'refresh');
+			}
+		}
+	}
+
+	public function forgot_password()
+	{
+		// setting validation rules by checking whether identity is username or email
+		if($this->config->item('identity', 'ion_auth') != 'email' )
+		{
+		   $this->form_validation->set_rules('identity', $this->lang->line('forgot_password_identity_label'), 'required');
+		}
+		else
+		{
+		   $this->form_validation->set_rules('identity', $this->lang->line('forgot_password_validation_email_label'), 'required|valid_email');
+		}
+
+
+		if ($this->form_validation->run() == false)
+		{
+			$this->data['type'] = $this->config->item('identity','ion_auth');
+			// setup the input
+			$this->data['identity'] = array('name' => 'identity',
+				'id' => 'identity',
+			);
+
+			if ( $this->config->item('identity', 'ion_auth') != 'email' ){
+				$this->data['identity_label'] = $this->lang->line('forgot_password_identity_label');
+			}
+			else
+			{
+				$this->data['identity_label'] = $this->lang->line('forgot_password_email_identity_label');
+			}
+
+			// set any errors and display the form
+			$this->data['message'] = (validation_errors()) ? validation_errors() : $this->session->flashdata('message');
+			$this->load->view('auth/forgot_password', $this->data);
+		}
+		else
+		{
+			$identity_column = $this->config->item('identity','ion_auth');
+			$identity = $this->ion_auth->where($identity_column, $this->input->post('identity'))->users()->row();
+
+			if(empty($identity)) {
+
+	            		if($this->config->item('identity', 'ion_auth') != 'email')
+		            	{
+		            		$this->ion_auth->set_error('forgot_password_identity_not_found');
+		            	}
+		            	else
+		            	{
+		            	   $this->ion_auth->set_error('forgot_password_email_not_found');
+		            	}
+
+		                $this->session->set_flashdata('message', $this->ion_auth->errors());
+                		redirect("auth/forgot_password", 'refresh');
+            		}
+
+			// run the forgotten password method to email an activation code to the user
+			$forgotten = $this->ion_auth->forgotten_password($identity->{$this->config->item('identity', 'ion_auth')});
+
+			if ($forgotten)
+			{
+				// if there were no errors
+				$this->session->set_flashdata('message', $this->ion_auth->messages());
+				redirect("games/login", 'refresh'); //we should display a confirmation page here instead of the login page
+			}
+			else
+			{
+				$this->session->set_flashdata('message', $this->ion_auth->errors());
+				redirect("auth/forgot_password", 'refresh');
+			}
+		}
+	}
+
 
 	public function goback()
 	{

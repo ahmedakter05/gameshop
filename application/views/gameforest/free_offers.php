@@ -30,7 +30,7 @@
 								
 								<ul>
 									<li><i class="fa fa-yelp"></i> <b>View: <?php echo $value['count']; ?></b></li>
-									<div class="pull-right"><li><i class="fa fa-cloud-download"></i> <a class="downloadLink" href="<?php echo base_url() . 'games/fdownload/' . $value['id'] . '/' . $value['link']; ?>"><b>Download</b></a></li></div>
+									<div class="pull-right"><li><i class="fa fa-cloud-download"></i> <a class="downloadLink" href="<?php echo base_url() . 'games/fdownload/' . $value['id'] . '/'; ?>"><b>Download</b></a></li></div>
 								</ul>
 							</div>
 						</div>

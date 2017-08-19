@@ -88,6 +88,43 @@
 			</div>
 		</section>
 
+<!------------------------------- Cards ------------------------------>
+		<section class="bg-grey-50" style="padding-bottom: 0px !important;">
+			<div class="container">
+				<div class="card-group">
+					<div class="row">
+						<div class="col-md-8 col-md-offset-2">
+							<div class="title outline">
+								<h4><i class="fa fa-cc-discover"></i> Game Cards</h4>
+								<p>Buy game cards and add credits to your gaming wallets</p>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<?php foreach ($home_latest_cards as $value): ?>
+						<div class="col-lg-3 col-md-4 col-sm-6 col-xs-12">
+							<div class="card card-hover">
+								<div class="card-img">
+									<a href="<?php echo base_url() . 'games/view/' . $value['url']; ?>"><img style="height: 175px !important;" src="<?php echo base_url() . 'assets/uploads/files/' . $value['imageurl1']; ?>" alt="<?php echo $value['name']; ?>" alt="<?php echo $value['name']; ?>"></a>
+									<!--div class="time" style="font-size: 13px; font-weight: bold; background: white;"><a href="<?php echo base_url() . 'games/addtocart/' . $value['url']; ?>" style="color: black !important;">Disc: <?php echo $value['discount']; ?>%</a></div-->
+								</div>
+								<div class="caption" style="padding: 20px 25px;">
+									<h5 class="card-title" style="font-size: 12px;"><a href="<?php echo base_url() . 'games/view/' . $value['url']; ?>"><?php echo substr($value['name'], 0, 24); ?></a><div class="pull-right" style="color: #ffffff; background-color: #1A1B1D; padding: 3px 3px 1px 3px ; margin-bottom: 1px;">Disc: <?php echo $value['discount']; ?>%</div></h5>
+									<ul>
+										<li><i class="fa fa-shopping-cart"></i> <a href="<?php echo base_url() . 'games/addtocart/' . $value['url']; ?>">Add to Cart</a></li>
+										<li>&nbsp;|</li>
+										<div class="pull-right"><li>&nbsp;&nbsp;<a href="<?php echo base_url() . 'games/view/' . $value['url']; ?>">BDT <?php echo number_format($value['price'], 2); ?></a></li></div>
+									</ul>
+								</div>
+							</div>
+						</div>
+						<?php endforeach; ?>
+					</div>
+				</div>
+				<div class="text-center"><a href="<?php echo base_url(); ?>games/category/cards" class="btn btn-primary btn-shadow btn-icon-right margin-top-10 margin-bottom-20">More Cards <i class="fa fa-angle-right"></i></a></div>
+			</div>
+		</section>
+
 		<!------------------------------- Accessories ------------------------------>
 		<section class="bg-grey-50" style="padding-bottom: 0px !important;">
 			<div class="container">
