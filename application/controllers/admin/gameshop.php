@@ -542,6 +542,58 @@ class Gameshop extends My_Controller {
 		$this->load->view($this->template_dir.'crud_view', $this->data);
 	}
 
+	public function order_history()
+	{
+		$page = 'Products';
+		$this->set_activepage($page);
+		$this->data['title'] = "TechFocus Ltd - Focusing on Technology" ;
+		$this->data['activepage'] = "Products" ;
+		$this->data['heading'] = "Order History";
+		$this->data['subheading'] = "GamersBd.com" ;
+
+		if (!$this->ion_auth->is_admin())
+		{
+			// redirect them to the login page
+			$this->session->set_userdata('last_page', current_url()); redirect('admin/cp/login', 'refresh');
+			//echo "Redirect to Login";
+		}
+		 
+		$this->data['orderlist'] = $orderhistory = $this->tfl_model->gameshop_get_order_list();
+		var_dump($orderhistory);
+
+		$this->data['message'] = $this->session->flashdata('message');
+		$this->load->view($this->template_dir.'order_list', $this->data);
+	}
+
+	public function order_view($orderno=NULL)
+	{
+		$page = 'Products';
+		$this->set_activepage($page);
+		$this->data['title'] = "TechFocus Ltd - Focusing on Technology" ;
+		$this->data['activepage'] = "Products" ;
+		$this->data['heading'] = "Order History";
+		$this->data['subheading'] = "GamersBd.com" ;
+
+		if (!$this->ion_auth->is_admin())
+		{
+			// redirect them to the login page
+			$this->session->set_userdata('last_page', current_url()); redirect('admin/cp/login', 'refresh');
+			//echo "Redirect to Login";
+		}
+		 
+		$this->data['orderlist'] = $orderhistory = $this->tfl_model->gameshop_get_order_list();
+		//var_dump($orderhistory);
+
+		$this->data['orderdetails'] = $this->tfl_model->gameshop_get_order_details($orderno);
+
+		var_dump($this->data['orderdetails']);
+
+		$this->data['message'] = $this->session->flashdata('message');
+		$this->load->view($this->template_dir.'order_view', $this->data);
+	}
+
+
+
 	function callback_tag_ui($post_array)
 	{
 	  if(empty($post_array['menu'])){

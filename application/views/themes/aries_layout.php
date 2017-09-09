@@ -9,7 +9,9 @@
     <title><?php echo $title ?></title>
     <link rel="icon" type="image/ico" href="<?php echo base_url(); ?>assets/aries/favicon.ico"/>
     
+    <link href="<?php echo base_url(); ?>assets/css/footer-distributed.css" rel="stylesheet" type="text/css" />
     <link href="<?php echo base_url(); ?>assets/aries/css/stylesheets.css" rel="stylesheet" type="text/css" />
+
 	
     <!--[if lte IE 7]>
         <link href="<?php echo base_url(); ?>assets/aries/css/ie.css" rel="stylesheet" type="text/css" />
@@ -198,8 +200,27 @@
             </ul>
             
 				<?php echo $output;?>
-				<?php // echo $this->load->get_section('sidebar'); ?>
+                <?php // echo $this->load->get_section('sidebar'); ?>
             
+                <div class="row-fluid">
+                    <br></br>
+                    <div class="head dblue">
+                        <footer class="footer-distributed">
+
+                            <div class="footer-right">
+
+
+                            </div>
+
+                            <div class="footer-left">
+                                <p>GamersBd &copy; 2017 all rights resrved</p>
+                            </div>
+
+                        </footer>
+                    </div>
+
+                </div>
+
         </div>
         
     </div>

@@ -1614,7 +1614,7 @@ Gameshop Boundary
 	function gameshop_manage_orders($info=NULL)
 	{
 		$query = $this->db->select('gameshop_purchase_orders.*, users.first_name, users.last_name, users.username, users.phone, gameshop_purchase_order_statuslist.name as statusname')
-						  ->limit(10)
+						  ->limit(100)
 						  ->order_by('ordertime', 'desc')
 						  ->where('userid', $info['userid'])
 						  ->join('gameshop_purchase_order_statuslist', 'gameshop_purchase_order_statuslist.id =  gameshop_purchase_orders.status', 'left')
@@ -1646,7 +1646,7 @@ Gameshop Boundary
 	function gameshop_get_order_details($orderno=NULL)
 	{
 		$query = $this->db->select('gameshop_purchase_products.*, gameshop_products.name')
-						  ->limit(10)
+						  ->limit(100)
 						  ->order_by('id', 'desc')
 						  ->where('orderno', $orderno)
 						  ->join('gameshop_products', 'gameshop_products.id =  gameshop_purchase_products.productid', 'left')
@@ -1829,7 +1829,17 @@ Gameshop Boundary
 		return $nquery;				  
 	}
 
+	function gameshop_get_order_list()
+	{
+		$query = $this->db->select('gameshop_purchase_orders.*, gameshop_purchase_order_statuslist.name as statusname')
+						  ->order_by('ordertime', 'desc')
+						  ->join('gameshop_purchase_order_statuslist', 'gameshop_purchase_order_statuslist.id =  gameshop_purchase_orders.status', 'left')
+						  ->join('users', 'users.id =  gameshop_purchase_orders.userid', 'left')
+						  ->get('gameshop_purchase_orders')
+						  ->result();
 
+	return $query;
+	}
 
 
 
